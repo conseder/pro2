@@ -24,3 +24,8 @@ html {
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
+.react-activity-calendar {
+
+  max-width: 150% !important;
+
+}

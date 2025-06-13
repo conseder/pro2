@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { 
   Code2, 
   Database, 
@@ -17,11 +18,29 @@ import {
   Zap,
   Building2,
   Users,
-  TrendingUp
+  TrendingUp,
+  Book,
+  Heart,
+  Moon,
+  Sun
 } from 'lucide-react';
+import GitHubActivity from './components/GitHubActivity';
+import { supabase } from './lib/supabase';
+import { useTheme } from './context/ThemeContext';
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,28 +57,81 @@ function App() {
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus({ type: null, message: '' });
+
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .insert([formData]);
+
+      if (error) throw error;
+
+      setFormStatus({
+        type: 'success',
+        message: 'Message sent successfully! I will get back to you soon.'
+      });
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    } catch (error) {
+      setFormStatus({
+        type: 'error',
+        message: 'Failed to send message. Please try again later or contact me on my email.'
+      });
+      console.error('Error sending message:', error);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
+        isScrolled 
+          ? 'bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm shadow-lg' 
+          : 'bg-transparent'
       }`}>
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="text-2xl font-bold text-blue-900">
+            <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">
               <Code2 className="inline w-8 h-8 mr-2" />
-              DevPortfolio
+              Mohammad Alarabiat
             </div>
-            <div className="hidden md:flex space-x-8">
-              {['About', 'Skills', 'Portfolio', 'Services', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className="text-gray-700 hover:text-blue-900 transition-colors duration-300 font-medium"
-                >
-                  {item}
-                </button>
-              ))}
+            <div className="flex items-center space-x-8">
+              <div className="hidden md:flex space-x-8">
+                {['About', 'Skills', 'AI', 'Portfolio', 'GitHub', 'Services', 'Contact'].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(item.toLowerCase())}
+                    className="text-gray-700 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-100 transition-colors duration-300 font-medium"
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="w-5 h-5 text-yellow-500" />
+                ) : (
+                  <Moon className="w-5 h-5 text-gray-700" />
+                )}
+              </button>
             </div>
           </div>
         </div>
@@ -103,58 +175,58 @@ function App() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white">
+      <section id="about" className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">About Me</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">About Me</h2>
             <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
           </div>
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-gray-900">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Transforming Business Through Technology
               </h3>
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 With a solid foundation in software engineering, I specialize in creating 
                 sophisticated business portals and automation systems that streamline 
                 operations and drive growth.
               </p>
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 My expertise lies in understanding complex business requirements and 
                 translating them into elegant, scalable software solutions that make 
                 a real impact on productivity and efficiency.
               </p>
               <div className="flex space-x-4">
-                <div className="bg-blue-50 p-4 rounded-lg flex-1">
-                  <Building2 className="w-8 h-8 text-blue-600 mb-2" />
-                  <h4 className="font-semibold text-gray-900">Business Portals</h4>
-                  <p className="text-sm text-gray-600">Custom enterprise solutions</p>
+                <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg flex-1">
+                  <Building2 className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-2" />
+                  <h4 className="font-semibold text-gray-900 dark:text-white">Business Portals</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Custom enterprise solutions</p>
                 </div>
-                <div className="bg-emerald-50 p-4 rounded-lg flex-1">
-                  <Settings className="w-8 h-8 text-emerald-600 mb-2" />
-                  <h4 className="font-semibold text-gray-900">Automation</h4>
-                  <p className="text-sm text-gray-600">Process optimization</p>
+                <div className="bg-emerald-50 dark:bg-emerald-900/30 p-4 rounded-lg flex-1">
+                  <Settings className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mb-2" />
+                  <h4 className="font-semibold text-gray-900 dark:text-white">Automation</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Process optimization</p>
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 p-8 rounded-2xl">
-              <h4 className="text-xl font-bold text-gray-900 mb-6">Education & Expertise</h4>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-800/30 p-8 rounded-2xl">
+              <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Education & Expertise</h4>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
-                  <span className="text-gray-700">Software Engineering Degree</span>
+                  <div className="w-3 h-3 bg-blue-600 dark:bg-blue-400 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Software Engineering Degree</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-emerald-600 rounded-full"></div>
-                  <span className="text-gray-700">Business Process Analysis</span>
+                  <div className="w-3 h-3 bg-emerald-600 dark:bg-emerald-400 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Business Process Analysis</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-amber-600 rounded-full"></div>
-                  <span className="text-gray-700">Enterprise Architecture</span>
+                  <div className="w-3 h-3 bg-amber-600 dark:bg-amber-400 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Enterprise Architecture</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
-                  <span className="text-gray-700">System Integration</span>
+                  <div className="w-3 h-3 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">System Integration</span>
                 </div>
               </div>
             </div>
@@ -163,55 +235,125 @@ function App() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 bg-gray-50">
+      <section id="skills" className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Technical Skills</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">Technical Skills</h2>
             <div className="w-24 h-1 bg-emerald-600 mx-auto"></div>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="text-blue-600 mb-4">
+            <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="text-blue-600 dark:text-blue-400 mb-4">
                 <Code2 className="w-12 h-12" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Frontend Development</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Custom Frameworks</h3>
               <div className="space-y-3">
-                {['React', 'TypeScript', 'Vue.js', 'Angular', 'Tailwind CSS'].map((skill) => (
+                {['Custom Web Framework', 'Flask', 'Python', 'JavaScript', 'HTML/CSS'].map((skill) => (
                   <div key={skill} className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-gray-700">{skill}</span>
+                    <div className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full"></div>
+                    <span className="text-gray-700 dark:text-gray-300">{skill}</span>
                   </div>
                 ))}
               </div>
             </div>
             
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="text-emerald-600 mb-4">
+            <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="text-emerald-600 dark:text-emerald-400 mb-4">
                 <Server className="w-12 h-12" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Backend Development</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Backend & Integration</h3>
               <div className="space-y-3">
-                {['Node.js', 'Python', 'C#/.NET', 'Java', 'PostgreSQL'].map((skill) => (
+                {['Google Sheets API', 'Google Drive API', 'OCR Processing', 'REST APIs', 'WebSocket'].map((skill) => (
                   <div key={skill} className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-emerald-600 rounded-full"></div>
-                    <span className="text-gray-700">{skill}</span>
+                    <div className="w-2 h-2 bg-emerald-600 dark:bg-emerald-400 rounded-full"></div>
+                    <span className="text-gray-700 dark:text-gray-300">{skill}</span>
                   </div>
                 ))}
               </div>
             </div>
             
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="text-amber-600 mb-4">
+            <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="text-amber-600 dark:text-amber-400 mb-4">
                 <Settings className="w-12 h-12" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Business Tools</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Business Solutions</h3>
               <div className="space-y-3">
-                {['Process Mining', 'Workflow Design', 'API Integration', 'Cloud Platforms', 'DevOps'].map((skill) => (
+                {['SaaS Development', 'Process Automation', 'Data Analytics', 'System Integration', 'Project Management'].map((skill) => (
                   <div key={skill} className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-amber-600 rounded-full"></div>
-                    <span className="text-gray-700">{skill}</span>
+                    <div className="w-2 h-2 bg-amber-600 dark:bg-amber-400 rounded-full"></div>
+                    <span className="text-gray-700 dark:text-gray-300">{skill}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Expertise Section */}
+      <section id="ai-expertise" className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">AI & Automation</h2>
+            <div className="w-24 h-1 bg-purple-600 mx-auto"></div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Harnessing AI for Business Innovation
+              </h3>
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                Specializing in prompt engineering and AI system development to create 
+                intelligent automation solutions that transform business operations.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Prompt Engineering</h4>
+                  <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
+                      <span>Custom AI Workflows</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
+                      <span>Context Optimization</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="bg-indigo-50 dark:bg-indigo-900/30 p-4 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">AI Integration</h4>
+                  <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-indigo-600 dark:bg-indigo-400 rounded-full"></div>
+                      <span>Business Automation</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-indigo-600 dark:bg-indigo-400 rounded-full"></div>
+                      <span>Process Optimization</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-800/30 p-8 rounded-2xl">
+              <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-6">AI Solutions</h4>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Custom AI Assistants</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-indigo-600 dark:bg-indigo-400 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Automated Workflows</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Intelligent Data Processing</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-indigo-600 dark:bg-indigo-400 rounded-full"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Business Process Automation</span>
+                </div>
               </div>
             </div>
           </div>
@@ -219,133 +361,135 @@ function App() {
       </section>
 
       {/* Portfolio Section */}
-      <section id="portfolio" className="py-20 bg-white">
+      <section id="portfolio" className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Portfolio</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">Portfolio</h2>
             <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
               <div className="flex items-center justify-between mb-6">
                 <div className="p-3 bg-blue-600 rounded-lg">
                   <Building2 className="w-8 h-8 text-white" />
                 </div>
-                <ExternalLink className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform duration-300" />
+                <ExternalLink className="w-6 h-6 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform duration-300" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Enterprise Portal Suite</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                Comprehensive business portal integrating HR, Finance, and Operations modules 
-                with real-time analytics and automated workflows.
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Corporate Management Portal (SaaS)</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                Enterprise-grade SaaS solution offering comprehensive business management with project tracking, 
+                contract management, and IoT integration. Features include multi-branch operations, staff management, 
+                advanced analytics, custom reporting, and real-time IoT data visualization. Available as a subscription-based 
+                service with tiered pricing plans.
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
-                {['React', 'Node.js', 'PostgreSQL', 'Redis'].map((tech) => (
-                  <span key={tech} className="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                {['React', 'Supabase', 'TypeScript', 'IoT', 'Analytics', 'Stripe'].map((tech) => (
+                  <span key={tech} className="bg-blue-200 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium">
                     {tech}
                   </span>
                 ))}
               </div>
-              <div className="flex items-center space-x-4 text-sm text-gray-600">
+              <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center space-x-1">
                   <Users className="w-4 h-4" />
-                  <span>500+ Users</span>
+                  <span>Project & Contract Management</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <TrendingUp className="w-4 h-4" />
-                  <span>40% Efficiency Gain</span>
+                  <span>IoT & Analytics</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/30 dark:to-emerald-800/30 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
               <div className="flex items-center justify-between mb-6">
                 <div className="p-3 bg-emerald-600 rounded-lg">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
-                <ExternalLink className="w-6 h-6 text-emerald-600 group-hover:scale-110 transition-transform duration-300" />
+                <ExternalLink className="w-6 h-6 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Automation Platform</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                AI-powered workflow automation system that eliminates manual processes 
-                and integrates with existing business tools seamlessly.
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Invoice Approval System</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                Advanced invoice processing system with OCR capabilities for supervisors. 
+                Features automated data extraction, approval workflows, and integration with Google Drive for document management.
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
-                {['Python', 'FastAPI', 'Docker', 'Azure'].map((tech) => (
-                  <span key={tech} className="bg-emerald-200 text-emerald-800 px-3 py-1 rounded-full text-sm font-medium">
+                {['Custom Framework', 'Flask', 'OCR', 'Google Sheets'].map((tech) => (
+                  <span key={tech} className="bg-emerald-200 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200 px-3 py-1 rounded-full text-sm font-medium">
                     {tech}
                   </span>
                 ))}
               </div>
-              <div className="flex items-center space-x-4 text-sm text-gray-600">
+              <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center space-x-1">
                   <BarChart3 className="w-4 h-4" />
-                  <span>80% Time Savings</span>
+                  <span>Automated Processing</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Shield className="w-4 h-4" />
-                  <span>99.9% Uptime</span>
+                  <span>Google Drive Integration</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+            <div className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/30 dark:to-amber-800/30 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
               <div className="flex items-center justify-between mb-6">
                 <div className="p-3 bg-amber-600 rounded-lg">
                   <Database className="w-8 h-8 text-white" />
                 </div>
-                <ExternalLink className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform duration-300" />
+                <ExternalLink className="w-6 h-6 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform duration-300" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Data Integration Hub</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                Centralized data management system connecting multiple business applications 
-                with real-time synchronization and advanced reporting capabilities.
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Enterprise Portal System</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                Integrated portal system for suppliers, drivers, and supervisors with real-time tracking, 
+                data visualization, and comprehensive reporting capabilities using Google Sheets for data management.
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
-                {['C#', 'SQL Server', 'Apache Kafka', 'Power BI'].map((tech) => (
-                  <span key={tech} className="bg-amber-200 text-amber-800 px-3 py-1 rounded-full text-sm font-medium">
+                {['Custom Framework', 'Flask', 'Google Sheets', 'Google Drive'].map((tech) => (
+                  <span key={tech} className="bg-amber-200 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200 px-3 py-1 rounded-full text-sm font-medium">
                     {tech}
                   </span>
                 ))}
               </div>
-              <div className="flex items-center space-x-4 text-sm text-gray-600">
+              <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center space-x-1">
                   <Globe className="w-4 h-4" />
-                  <span>Multi-Platform</span>
+                  <span>Multi-role Access</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Settings className="w-4 h-4" />
-                  <span>Auto-Scaling</span>
+                  <span>Google Integration</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
               <div className="flex items-center justify-between mb-6">
                 <div className="p-3 bg-purple-600 rounded-lg">
                   <BarChart3 className="w-8 h-8 text-white" />
                 </div>
-                <ExternalLink className="w-6 h-6 text-purple-600 group-hover:scale-110 transition-transform duration-300" />
+                <ExternalLink className="w-6 h-6 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform duration-300" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Analytics Dashboard</h3>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                Executive-level business intelligence platform with predictive analytics, 
-                custom KPI tracking, and automated report generation.
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Professional Form System</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                Custom form management system with Flask backend for professional client data collection. 
+                Features dynamic form generation, data validation, and seamless Google Sheets integration for data storage.
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
-                {['Vue.js', 'D3.js', 'MongoDB', 'AWS'].map((tech) => (
-                  <span key={tech} className="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+                {['Custom Framework', 'Flask', 'Google Sheets', 'Google Drive'].map((tech) => (
+                  <span key={tech} className="bg-purple-200 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm font-medium">
                     {tech}
                   </span>
                 ))}
               </div>
-              <div className="flex items-center space-x-4 text-sm text-gray-600">
+              <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center space-x-1">
                   <TrendingUp className="w-4 h-4" />
-                  <span>Real-time Data</span>
+                  <span>Dynamic Forms</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Users className="w-4 h-4" />
-                  <span>Executive Level</span>
+                  <span>Google Integration</span>
                 </div>
               </div>
             </div>
@@ -353,11 +497,113 @@ function App() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-20 bg-gray-50">
+      {/* Under Progress Section */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Services</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">Under Progress</h2>
+            <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
+            <p className="text-xl text-gray-600 dark:text-gray-400 mt-4">Exciting projects in development</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+              <div className="flex items-center justify-between mb-6">
+                <div className="p-3 bg-blue-600 rounded-lg">
+                  <Database className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-sm font-medium text-blue-600 dark:text-blue-400">Coming Soon</div>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Web-Based POS System</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                Cloud-based Point of Sale system requiring no software installation or dedicated hardware. 
+                Features comprehensive inventory management, transaction processing, and advanced business analytics 
+                with interactive visualizations.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {['Web-Based', 'Cloud Storage', 'Real-time Analytics', 'Inventory Management'].map((tech) => (
+                  <span key={tech} className="bg-blue-200 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/30 dark:to-emerald-800/30 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+              <div className="flex items-center justify-between mb-6">
+                <div className="p-3 bg-emerald-600 rounded-lg">
+                  <Building2 className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-sm font-medium text-emerald-600 dark:text-emerald-400">Coming Soon</div>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Small Business Management App</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                Integrated business management solution for small businesses. Features staff management, 
+                transaction tracking, and seamless integration with existing POS systems. Includes advanced 
+                data visualization for business insights.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {['POS Integration', 'Staff Management', 'Data Analytics', 'Business Intelligence'].map((tech) => (
+                  <span key={tech} className="bg-emerald-200 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-200 px-3 py-1 rounded-full text-sm font-medium">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/30 dark:to-amber-800/30 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+              <div className="flex items-center justify-between mb-6">
+                <div className="p-3 bg-amber-600 rounded-lg">
+                  <Book className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-sm font-medium text-amber-600 dark:text-amber-400">Coming Soon</div>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Course Learning Platform</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                User-friendly platform for hosting and accessing online courses. Features intuitive course 
+                management, progress tracking, and interactive learning tools. Designed for both course 
+                creators and learners.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {['Course Management', 'Progress Tracking', 'Interactive Learning', 'Content Delivery'].map((tech) => (
+                  <span key={tech} className="bg-amber-200 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200 px-3 py-1 rounded-full text-sm font-medium">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+              <div className="flex items-center justify-between mb-6">
+                <div className="p-3 bg-purple-600 rounded-lg">
+                  <Heart className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-sm font-medium text-purple-600 dark:text-purple-400">Coming Soon</div>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Medical Connection Platform</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                Comprehensive platform connecting patients with healthcare providers. Features full clinic 
+                management capabilities, appointment scheduling, patient records, and secure communication 
+                channels.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {['Clinic Management', 'Patient Portal', 'Appointment System', 'Medical Records'].map((tech) => (
+                  <span key={tech} className="bg-purple-200 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm font-medium">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <GitHubActivity />
+
+      {/* Services Section */}
+      <section id="services" className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">Services</h2>
             <div className="w-24 h-1 bg-emerald-600 mx-auto"></div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -399,12 +645,20 @@ function App() {
                 color: 'indigo'
               }
             ].map((service, index) => (
-              <div key={index} className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <div className={`text-${service.color}-600 mb-4`}>
+              <div key={index} className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div className={`
+                  ${service.color === 'red' ? 'text-red-600 dark:text-red-400' : ''}
+                  ${service.color === 'indigo' ? 'text-indigo-600 dark:text-indigo-400' : ''}
+                  ${service.color === 'blue' ? 'text-blue-600 dark:text-blue-400' : ''}
+                  ${service.color === 'emerald' ? 'text-emerald-600 dark:text-emerald-400' : ''}
+                  ${service.color === 'amber' ? 'text-amber-600 dark:text-amber-400' : ''}
+                  ${service.color === 'purple' ? 'text-purple-600 dark:text-purple-400' : ''}
+                  mb-4
+                `}>
                   <service.icon className="w-12 h-12" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
-                <p className="text-gray-700 leading-relaxed">{service.description}</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{service.title}</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{service.description}</p>
               </div>
             ))}
           </div>
@@ -427,9 +681,9 @@ function App() {
             <div className="space-y-8">
               <h3 className="text-2xl font-bold mb-6">Get In Touch</h3>
               {[
-                { icon: Mail, label: 'Email', value: 'hello@developer.com', href: 'mailto:hello@developer.com' },
-                { icon: Phone, label: 'Phone', value: '+1 (555) 123-4567', href: 'tel:+15551234567' },
-                { icon: MapPin, label: 'Location', value: 'San Francisco, CA', href: '#' }
+                { icon: Mail, label: 'Email', value: 'mohammad@alarabyat.com', href: 'mailto:mohammad@alarabyat.com' },
+                { icon: Phone, label: 'Phone', value: '+962796437884', href: 'tel:+962796437884' },
+                { icon: MapPin, label: 'Location', value: 'Amman, Jordan' }
               ].map((contact, index) => (
                 <a
                   key={index}
@@ -448,8 +702,8 @@ function App() {
               
               <div className="flex space-x-4 pt-8">
                 {[
-                  { icon: Github, href: 'https://github.com', label: 'GitHub' },
-                  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' }
+                  { icon: Github, href: 'https://github.com/conseder', label: 'GitHub' },
+                  { icon: Linkedin, href: 'https://www.linkedin.com/in/mohammad-arabiat-487612329/', label: 'LinkedIn' }
                 ].map((social, index) => (
                   <a
                     key={index}
@@ -467,19 +721,34 @@ function App() {
             
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
               <h3 className="text-2xl font-bold mb-6">Send a Message</h3>
-              <form className="space-y-6">
+              {formStatus.type && (
+                <div className={`mb-6 p-4 rounded-lg ${
+                  formStatus.type === 'success' ? 'bg-emerald-500/20 text-emerald-200' : 'bg-red-500/20 text-red-200'
+                }`}>
+                  {formStatus.message}
+                </div>
+              )}
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <input
                       type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
                       placeholder="Your Name"
+                      required
                       className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
                     />
                   </div>
                   <div>
                     <input
                       type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       placeholder="Your Email"
+                      required
                       className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
                     />
                   </div>
@@ -487,14 +756,22 @@ function App() {
                 <div>
                   <input
                     type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
                     placeholder="Subject"
+                    required
                     className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
                   />
                 </div>
                 <div>
                   <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
                     rows={5}
                     placeholder="Your Message"
+                    required
                     className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300 resize-none"
                   ></textarea>
                 </div>
@@ -511,20 +788,16 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 dark:bg-black text-white py-12">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <div className="flex items-center justify-center mb-6">
             <Code2 className="w-8 h-8 mr-2 text-emerald-400" />
-            <span className="text-2xl font-bold">DevPortfolio</span>
+            <span className="text-2xl font-bold">Mohammad Alarabiat</span>
           </div>
           <p className="text-gray-400 mb-6">
             Transforming businesses through innovative software solutions
           </p>
-          <div className="border-t border-gray-800 pt-6">
-            <p className="text-gray-500">
-              &copy; 2025 DevPortfolio. All rights reserved.
-            </p>
-          </div>
+          
         </div>
       </footer>
     </div>
