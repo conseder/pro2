@@ -356,7 +356,7 @@ function App() {
       description: 'Comprehensive platform connecting patients with healthcare providers. Features full clinic management capabilities, appointment scheduling, patient records, and secure communication channels.',
       icon: Heart,
       color: 'purple',
-      link: null,
+      link: 'https://medical.alarabyat.com/',
       technologies: ['Clinic Management', 'Patient Portal', 'Appointment System', 'Medical Records']
     }
   ];
