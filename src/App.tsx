@@ -332,7 +332,7 @@ function App() {
       description: 'Cloud-based Point of Sale system requiring no software installation or dedicated hardware. Features comprehensive inventory management, transaction processing, and advanced business analytics with interactive visualizations.',
       icon: Database,
       color: 'blue',
-      link: null,
+      link:'https://pos.alarabyat.com/',
       technologies: ['Web-Based', 'Cloud Storage', 'Real-time Analytics', 'Inventory Management']
     },
     {
