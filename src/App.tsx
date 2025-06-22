@@ -340,7 +340,7 @@ function App() {
       description: 'Integrated business management solution for small businesses. Features staff management, transaction tracking, and seamless integration with existing POS systems. Includes advanced data visualization for business insights.',
       icon: Building2,
       color: 'emerald',
-      link: null,
+      link:'https://business.alarabyat.com/',
       technologies: ['POS Integration', 'Staff Management', 'Data Analytics', 'Business Intelligence']
     },
     {
