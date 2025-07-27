@@ -70,7 +70,7 @@ function App() {
       longDescription: 'A comprehensive enterprise solution that revolutionizes how businesses manage their operations. The platform integrates project tracking, contract management, and IoT capabilities to provide a unified experience for managing complex business processes. With features like multi-branch operations, staff management, and advanced analytics, it helps organizations streamline their workflows and make data-driven decisions.',
       icon: Building2,
       color: 'blue',
-      link: ',
+      link: '',
       technologies: ['React', 'Supabase', 'TypeScript', 'IoT', 'Analytics', 'Stripe'],
       videoUrl: '',
       heroImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
