@@ -1,27 +1,9 @@
 [build]
   command = "npm run build"
-  publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "18"
+  publish = "dist"    # change "dist" to the correct build output (e.g. "build", "public")
+  # base = ""         # optional: set if your app lives in a subdirectory
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[context.production]
-  command = "npm run build"
-  publish = "dist"
-
-[context.deploy-preview]
-  command = "npm run build"
-  publish = "dist"
-
-[context.branch-deploy]
-  command = "npm run build"
-  publish = "dist"
-
-[context.main]
-  command = "npm run build"
-  publish = "dist"
