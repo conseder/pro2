@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { 
-  Code2, 
-  Database, 
-  Server, 
-  Globe, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Github, 
-  Linkedin, 
+import {
+  Code2,
+  Database,
+  Server,
+  Globe,
+  Mail,
+  Phone,
+  MapPin,
+  Github,
+  Linkedin,
   ExternalLink,
   ChevronDown,
   Settings,
@@ -332,7 +332,7 @@ function App() {
       description: 'Cloud-based Point of Sale system requiring no software installation or dedicated hardware. Features comprehensive inventory management, transaction processing, and advanced business analytics with interactive visualizations.',
       icon: Database,
       color: 'blue',
-      link:'https://pos.alarabyat.com/',
+      link: 'https://pos.alarabyat.com/',
       technologies: ['Web-Based', 'Cloud Storage', 'Real-time Analytics', 'Inventory Management']
     },
     {
@@ -340,7 +340,7 @@ function App() {
       description: 'Integrated business management solution for small businesses. Features staff management, transaction tracking, and seamless integration with existing POS systems. Includes advanced data visualization for business insights.',
       icon: Building2,
       color: 'emerald',
-      link:'https://business.alarabyat.com/',
+      link: 'https://business.alarabyat.com/',
       technologies: ['POS Integration', 'Staff Management', 'Data Analytics', 'Business Intelligence']
     },
     {
@@ -431,14 +431,15 @@ function App() {
   };
 
   const handleProjectClick = (project: any) => {
-    const projectId = project.title.toLowerCase().replace(/\s+/g, '-');
-    navigate(`/project/${projectId}`);
+    // setSelectedProject(project);
+    // const projectId = project.title.toLowerCase().replace(/\s+/g, '-');
+    // navigate(`/project/${projectId}`);
   };
 
   const handleShare = async (project: any) => {
     const projectId = project.title.toLowerCase().replace(/\s+/g, '-');
     const shareUrl = `${window.location.origin}/project/${projectId}`;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -449,7 +450,7 @@ function App() {
       } catch (error) {
         console.error('Error sharing:', error);
       }
-    } 
+    }
   };
 
   return (
@@ -466,14 +467,13 @@ function App() {
       ) : (
         <>
           {/* Navigation */}
-          <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-            isScrolled 
-              ? 'bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm shadow-lg' 
+          <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+              ? 'bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm shadow-lg'
               : 'bg-transparent'
-          }`}>
+            }`}>
             <div className="max-w-6xl mx-auto px-6 py-4">
               <div className="flex justify-between items-center">
-                <div className={`text-2xl font-bold ${isScrolled ? (theme === 'dark' ? 'text-blue-100' : 'text-blue-900') : 'text-white'}`}> 
+                <div className={`text-2xl font-bold ${isScrolled ? (theme === 'dark' ? 'text-blue-100' : 'text-blue-900') : 'text-white'}`}>
                   <Code2 className="inline w-8 h-8 mr-2" />
                   Mohammad Alarabiat
                 </div>
@@ -510,12 +510,13 @@ function App() {
             <div className="absolute inset-0 bg-black/20"></div>
             <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
               <div className="animate-fade-in-up">
-                <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                  Software Engineer
-                  <span className="block text-emerald-400">& Business Innovator</span>
+                <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight bg-gradient-to-r from-emerald-500 via-blue-400 to-purple-500 bg-clip-text text-transparent">
+                  Senior Full-stack Developer
+                  <h2><span className="block text-blue-400"></span> <span className="block text-emerald-400">& Business Innovator</span>
+                  </h2>
                 </h1>
                 <p className="text-xl md:text-2xl mb-8 text-blue-100 leading-relaxed">
-                  Specializing in business portals and automation solutions that transform 
+                  Specializing in business portals, SaaS and automation solutions that transform
                   how companies operate and scale
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -555,13 +556,13 @@ function App() {
                     Transforming Business Through Technology
                   </h3>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    With a solid foundation in software engineering, I specialize in creating 
-                    sophisticated business portals and automation systems that streamline 
+                    With a solid foundation in software engineering, I specialize in creating
+                    sophisticated business portals and automation systems that streamline
                     operations and drive growth.
                   </p>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    My expertise lies in understanding complex business requirements and 
-                    translating them into elegant, scalable software solutions that make 
+                    My expertise lies in understanding complex business requirements and
+                    translating them into elegant, scalable software solutions that make
                     a real impact on productivity and efficiency.
                   </p>
                   <div className="flex space-x-4">
@@ -624,7 +625,7 @@ function App() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                   <div className="text-emerald-600 dark:text-emerald-400 mb-4">
                     <Server className="w-12 h-12" />
@@ -639,7 +640,7 @@ function App() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                   <div className="text-amber-600 dark:text-amber-400 mb-4">
                     <Settings className="w-12 h-12" />
@@ -671,7 +672,7 @@ function App() {
                     Harnessing AI for Business Innovation
                   </h3>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    Specializing in prompt engineering and AI system development to create 
+                    Specializing in prompt engineering and AI system development to create
                     intelligent automation solutions that transform business operations.
                   </p>
                   <div className="grid grid-cols-2 gap-4">
@@ -835,6 +836,12 @@ function App() {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
                   {
+                    icon: Server,
+                    title: 'SasS Development',
+                    description: 'Scalable SaaS platforms tailored to your business needs, enabling efficient service delivery and customer management.',
+                    color: 'blue'
+                  },
+                  {
                     icon: Building2,
                     title: 'Business Portal Development',
                     description: 'Custom enterprise portals that unify your business operations and improve team collaboration.',
@@ -893,102 +900,102 @@ function App() {
 
           {/* Contact Section */}
           <section id="contact" className="py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white">
-          <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">Let's Work Together</h2>
-            <div className="w-24 h-1 bg-emerald-400 mx-auto mb-6"></div>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              Ready to transform your business with cutting-edge technology solutions? Let's
-              discuss how we can optimize your operations and drive growth.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-start">
-            {/* Contact Card */}
-            <div className="backdrop-blur-md bg-white/10 rounded-2xl p-10 text-white shadow-lg">
-              <h3 className="text-2xl font-bold mb-8">Get In Touch</h3>
-              <div className="space-y-8">
-                {[
-                  { icon: Mail, label: 'Email', value: 'mohammad@alarabyat.com', href: 'mailto:mohammad@alarabyat.com' },
-                  { icon: Phone, label: 'Phone', value: '+962796437884', href: 'tel:+962796437884' },
-                  { icon: MapPin, label: 'Location', value: 'Amman, Jordan' }
-                ].map((contact, index) => (
-                  <a
-                    key={index}
-                    href={contact.href}
-                    className="flex items-center space-x-4 group"
-                  >
-                    <div className="p-3 bg-white/10 rounded-lg">
-                      <contact.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-white/70">{contact.label}</div>
-                      <div className="text-lg font-semibold text-white group-hover:underline">
-                        {contact.value}
-                      </div>
-                    </div>
-                  </a>
-                ))}
+            <div className="max-w-6xl mx-auto px-6">
+              <div className="text-center mb-12">
+                <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">Let's Work Together</h2>
+                <div className="w-24 h-1 bg-emerald-400 mx-auto mb-6"></div>
+                <p className="text-xl text-white/90 max-w-3xl mx-auto">
+                  Ready to transform your business with cutting-edge technology solutions? Let's
+                  discuss how we can optimize your operations and drive growth.
+                </p>
               </div>
-              <div className="flex space-x-6 pt-10">
-                {[
-                  { icon: Github, href: 'https://github.com/conseder', label: 'GitHub' },
-                  { icon: Linkedin, href: 'https://www.linkedin.com/in/mohammad-arabiat-487612329/', label: 'LinkedIn' }
-                ].map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-lg hover:bg-white/20 transition-all duration-300"
-                    aria-label={social.label}
-                  >
-                    <social.icon className="w-7 h-7 text-white" />
-                  </a>
-                ))}
-              </div>
-            </div>
 
-            {/* Glassmorphic Form Card */}
-            <div className="backdrop-blur-md bg-white/10 rounded-2xl p-10 shadow-lg">
-              <h3 className="text-2xl font-bold mb-8 text-white">Send a Message</h3>
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    required
-                    className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Your Email"
-                    required
-                    className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
-                  />
+              <div className="grid md:grid-cols-2 gap-12 items-start">
+                {/* Contact Card */}
+                <div className="backdrop-blur-md bg-white/10 rounded-2xl p-10 text-white shadow-lg">
+                  <h3 className="text-2xl font-bold mb-8">Get In Touch</h3>
+                  <div className="space-y-8">
+                    {[
+                      { icon: Mail, label: 'Email', value: 'mohammad@alarabyat.com', href: 'mailto:mohammad@alarabyat.com' },
+                      { icon: Phone, label: 'Phone', value: '+962796437884', href: 'tel:+962796437884' },
+                      { icon: MapPin, label: 'Location', value: 'Amman, Jordan' }
+                    ].map((contact, index) => (
+                      <a
+                        key={index}
+                        href={contact.href}
+                        className="flex items-center space-x-4 group"
+                      >
+                        <div className="p-3 bg-white/10 rounded-lg">
+                          <contact.icon className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="text-sm text-white/70">{contact.label}</div>
+                          <div className="text-lg font-semibold text-white group-hover:underline">
+                            {contact.value}
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                  <div className="flex space-x-6 pt-10">
+                    {[
+                      { icon: Github, href: 'https://github.com/conseder', label: 'GitHub' },
+                      { icon: Linkedin, href: 'https://www.linkedin.com/in/mohammad-arabiat-487612329/', label: 'LinkedIn' }
+                    ].map((social, index) => (
+                      <a
+                        key={index}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-3 rounded-lg hover:bg-white/20 transition-all duration-300"
+                        aria-label={social.label}
+                      >
+                        <social.icon className="w-7 h-7 text-white" />
+                      </a>
+                    ))}
+                  </div>
                 </div>
-                <input
-                  type="text"
-                  placeholder="Subject"
-                  required
-                  className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
-                />
-                <textarea
-                  rows={5}
-                  placeholder="Your Message"
-                  required
-                  className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300 resize-none"
-                ></textarea>
-                <button
-                  type="submit"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 px-8 py-4 rounded-lg font-semibold text-lg text-white transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
-                >
-                  Send Message
-                </button>
-              </form>
+
+                {/* Glassmorphic Form Card */}
+                <div className="backdrop-blur-md bg-white/10 rounded-2xl p-10 shadow-lg">
+                  <h3 className="text-2xl font-bold mb-8 text-white">Send a Message</h3>
+                  <form className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        placeholder="Your Name"
+                        required
+                        className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
+                      />
+                      <input
+                        type="email"
+                        placeholder="Your Email"
+                        required
+                        className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Subject"
+                      required
+                      className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300"
+                    />
+                    <textarea
+                      rows={5}
+                      placeholder="Your Message"
+                      required
+                      className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all duration-300 resize-none"
+                    ></textarea>
+                    <button
+                      type="submit"
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 px-8 py-4 rounded-lg font-semibold text-lg text-white transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                    >
+                      Send Message
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
           </section>
 
           {/* Footer */}
@@ -1001,7 +1008,7 @@ function App() {
               <p className="text-gray-400 mb-6">
                 Transforming businesses through innovative software solutions
               </p>
-              
+
             </div>
           </footer>
         </>
