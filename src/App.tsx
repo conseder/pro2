@@ -553,17 +553,13 @@ function App() {
               <div className="grid md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6">
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    Transforming Business Through Technology
+                    Senior Full-Stack Developer
                   </h3>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    With a solid foundation in software engineering, I specialize in creating
-                    sophisticated business portals and automation systems that streamline
-                    operations and drive growth.
+                    I build and maintain full-stack solutions for both SaaS products and internal systems. My work focuses on improving processes, automating tasks, and creating tools that make teams faster and more efficient.
                   </p>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    My expertise lies in understanding complex business requirements and
-                    translating them into elegant, scalable software solutions that make
-                    a real impact on productivity and efficiency.
+                    I handle everything from planning and backend development to frontend UI, integrations, and deployment. I also experiment with new ideas, prototype features, and help guide technical decisions to keep projects scalable, secure, and reliable. I regularly review code, support teammates, and make sure our overall development workflow runs smoothly.
                   </p>
                   <div className="flex space-x-4">
                     <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg flex-1">
